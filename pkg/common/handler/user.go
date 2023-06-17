@@ -86,3 +86,12 @@ func (h *Handler) GetUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, user)
 }
+
+func (h *Handler) Buy(c echo.Context) error {
+	action := new(models.Purchase)
+	if err := c.Bind(action); err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+	h.Queue.Publish()
+	return nil
+}

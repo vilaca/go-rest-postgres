@@ -6,8 +6,9 @@ import (
 )
 
 type Config struct {
-	Port  int    `mapstructure:"PORT"`
-	DbUrl string `mapstructure:"DB_URL"`
+	Port     int    `mapstructure:"PORT"`
+	DbUrl    string `mapstructure:"DB_URL"`
+	RedisUrl string `mapstructure:"REDIS_URL"`
 }
 
 func LoadConfig(configPath *string) (c Config, err error) {
