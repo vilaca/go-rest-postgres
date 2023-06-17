@@ -1,3 +1,4 @@
 PORT: 1323
 DB_URL: postgres://test:test@localhost:5435/gomin
-REDIS_URL: localhost:6379 
+REDIS_URL: localhost:6379
+NEW_CLUSTER_STREAM: create-cluster-stream

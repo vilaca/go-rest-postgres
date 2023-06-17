@@ -20,7 +20,6 @@ func NewDatabase(c config.Config) *Database {
 }
 
 func NewPgConnectionPool(c config.Config) (*pgxpool.Pool, error) {
-	// urlExample := "postgres://username:password@localhost:5432/database_name"
 	dbUrl := c.DbUrl
 	dbConfig, err := pgxpool.ParseConfig(dbUrl)
 	if err != nil {

@@ -16,6 +16,12 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+      
   migrate:
     container_name: gomin_migrate
     depends_on:

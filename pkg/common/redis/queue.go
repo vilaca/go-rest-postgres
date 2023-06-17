@@ -8,36 +8,31 @@ import (
 )
 
 type QueueRepository interface {
-	// CreateUser(user *models.User) (*models.User, error)
-	// GetUser(id string) (*models.User, error)
-	// UserExists(name string) (bool, error)
-	// Login(name string, password string) (bool, error)
-	// CreateSession(*models.Session) error
 	Publish() (string, error)
 	Read()
 }
 
 func (r *RedisQueueRepository) Publish() (string, error) {
 	args := redis.XAddArgs{
-		Stream: "ohoh-stream",
+		Stream: r.Stream,
 		Values: map[string]interface{}{
 			"action":   "start",
 			"resource": "product-1",
 			"user":     "bob",
 		},
 	}
-	return r.client.XAdd(&args).Result()
+	return r.Client.XAdd(&args).Result()
 }
 
 func Process(r *RedisQueueRepository) {
 	id := "0"
 	for {
 		args := redis.XReadArgs{
-			Streams: []string{"ohoh-stream", id},
+			Streams: []string{r.Stream, id},
 			Count:   1,
 			Block:   0,
 		}
-		data, err := r.client.XRead(&args).Result()
+		data, err := r.Client.XRead(&args).Result()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -55,9 +50,12 @@ func (r *RedisQueueRepository) Read() {
 }
 
 type RedisQueueRepository struct {
-	client *redis.Client
+	Client *redis.Client
+	Stream string
 }
 
-func NewQueue(client *redis.Client) (*RedisQueueRepository, error) {
-	return &RedisQueueRepository{client: client}, nil
+func NewQueue(client *redis.Client, stream string) (*RedisQueueRepository, error) {
+	rp := RedisQueueRepository{Client: client, Stream: stream}
+	rp.Read()
+	return &rp, nil
 }

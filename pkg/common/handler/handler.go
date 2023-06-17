@@ -22,7 +22,7 @@ func LoadHandler(configPath *string) *Handler {
 
 func LoadHandlerFromConfig(cfg config.Config) *Handler {
 	rc, _ := redis.StartRedisClient(cfg)
-	rp, _ := redis.NewQueue(rc)
+	rp, _ := redis.NewQueue(rc, cfg.NewClusterStream)
 	rp.Read()
 	database := db.NewDatabase(cfg)
 	userRepo, _ := db.NewUserRepository(database)
