@@ -18,6 +18,7 @@ func SetupRouter(handler *handler.Handler) *echo.Echo {
 	// e.GET("/users", api.GetAllUsers)
 	e.POST("/users", handler.CreateUser)
 	e.GET("/users/:id", handler.GetUser)
+	e.POST("/sessions", handler.CreateSession)
 	// e.PUT("/users/:id", api.UpdateUser)
 	// e.DELETE("/users/:id", api.DeleteUser)
 	return e
