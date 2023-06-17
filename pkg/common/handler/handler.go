@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/pauljamescleary/gomin/pkg/common/config"
 	"github.com/pauljamescleary/gomin/pkg/common/db"
 	"github.com/pauljamescleary/gomin/pkg/common/redis"
@@ -23,13 +21,11 @@ func LoadHandler(configPath *string) *Handler {
 }
 
 func LoadHandlerFromConfig(cfg config.Config) *Handler {
-	fmt.Printf("*** DB URL %s", cfg.DbUrl)
-
 	rc, _ := redis.StartRedisClient(cfg)
 	rp, _ := redis.NewQueue(rc)
+	rp.Read()
 	database := db.NewDatabase(cfg)
 	userRepo, _ := db.NewUserRepository(database)
 	handler := NewHandler(userRepo, rp)
-
 	return handler
 }
